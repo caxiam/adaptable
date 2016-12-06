@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='adaptable',
-    version='0.2',
+    version='0.1',
     url='https://github.com/caxiam/adaptable',
     license='Apache Version 2.0',
     author='Colton Allen',
