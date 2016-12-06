@@ -100,6 +100,16 @@ class Adapter(metaclass=_AdapterRegistry):
         return self.fetch_one(query, id)
 
     @abstractmethod
+    def fetch_compounded(self, id, **kwargs):
+        """Return a single-object query including joined relationships.
+
+        Keyword arguments:
+            id: Unique model identifier.
+            filters (dict): Column, value filter options.
+        """
+        return
+
+    @abstractmethod
     def fetch_all(self, query) -> list:
         """Return a list of model instances.
 
@@ -121,6 +131,43 @@ class Adapter(metaclass=_AdapterRegistry):
     @abstractmethod
     def make_query(self):
         """Return a query object."""
+        return
+
+    @abstractmethod
+    def make_models_response(self, models: list):
+        """Return a serialized set of model instances.
+
+        Keyword arguments:
+            models (list): List of model class instances.
+        """
+        return
+
+    @abstractmethod
+    def make_model_response(self, model):
+        """Return a serialized model instance.
+
+        Keyword arguments:
+            model: Model class instance.
+        """
+        return
+
+    @abstractmethod
+    def make_collection_response(self, **filters):
+        """Return a collection query response type.
+
+        Keyword arguments:
+            filters (dict): Column, value filter options.
+        """
+        return
+
+    @abstractmethod
+    def make_single_object_response(self, id, **filters):
+        """Return a single-object query response type.
+
+        Keyword arguments:
+            id: Unique model identifier.
+            filters (dict): Column, value filter options.
+        """
         return
 
 
