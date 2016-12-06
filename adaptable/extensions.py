@@ -136,5 +136,7 @@ class JSONAPIAdapter(Adapter):
                 raise self.make_jsonapi_errors(errors)
 
         result = self.fetch_one(query, id)
-        includes = group_and_remove([result], selects + [self.model])
-        return includes.pop()[0], includes, schemas
+        if isinstance(result, tuple):
+            includes = group_and_remove([result[1:]], selects)
+            return result[0], includes, schemas
+        return result, [], []
