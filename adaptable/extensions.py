@@ -1,4 +1,11 @@
-"""."""
+"""Adapter extensions.
+
+Extensions allow for out-of-the-box compatibility with your API
+specification of choice.
+
+Currently supported formats:
+    - JSONAPI (http://jsonapi.org)
+"""
 from abc import abstractmethod
 
 from jsonapiquery import JSONAPIQuery
@@ -24,6 +31,16 @@ class JSONAPIAdapter(Adapter):
     "can_*" values default to True but they can specified explicitly if
     required.
     """
+
+    def __init__(self, base_url='', parameters={}):
+        """Initialize the adapter class.
+
+        Keyword arguments:
+            base_url (str): Request URL stripped of its query parameters.
+            parameters (dict): Parameter, value pairs.
+        """
+        self.base_url = base_url
+        self.parameters = parameters
 
     def make_jsonapi(self, model, view) -> JSONAPIQuery:
         """Return a JSONAPI instance.
@@ -77,7 +94,8 @@ class JSONAPIAdapter(Adapter):
 
         response = self.make_models_response(models.pop())
         response = jsonapi.make_included_response(response, models, schemas)
-        response = jsonapi.make_paginated_response(response, total)
+        response = jsonapi.make_paginated_response(
+            response, self.base_url, total)
         return response
 
     def make_single_object_response(self, id, **kwargs) -> dict:
@@ -113,7 +131,7 @@ class JSONAPIAdapter(Adapter):
         selects = []
         schemas = []
         if self.query_options.get('can_compound', True):
-            query, selects, schemas, errors = jsonapi.compound(query)
+            query, selects, schemas, errors = jsonapi.include(query)
             if errors:
                 raise self.make_jsonapi_errors(errors)
 

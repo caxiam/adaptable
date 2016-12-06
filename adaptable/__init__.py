@@ -1,4 +1,7 @@
-"""."""
+"""adaptable.
+
+A serialization middleware.
+"""
 from abc import abstractmethod
 
 
@@ -49,14 +52,6 @@ class Adapter(metaclass=_AdapterRegistry):
 
     model = None
     view = None
-
-    def __init__(self, parameters={}):
-        """Initialize the adapter class.
-
-        Keyword arguments:
-            parameters (dict): Parameter, value pairs.
-        """
-        self.parameters = parameters
 
     @abstractmethod
     def deserialize(self, form: dict) -> dict:
