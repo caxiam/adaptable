@@ -60,7 +60,6 @@ class JSONAPIUnitTestCase(SQLAlchemyTestMixin, UnitTestCase):
 
         adapter = UserAdapter()
         response = adapter.make_collection_response()
-        print(response)
         self.assertTrue('data' in response)
         self.assertTrue(isinstance(response['data'], list))
         self.assertTrue('id' in response['data'][0])
@@ -82,25 +81,3 @@ class JSONAPIUnitTestCase(SQLAlchemyTestMixin, UnitTestCase):
         self.assertTrue('name' in response['data']['attributes'])
         self.assertTrue('parent' in response['data']['relationships'])
         self.assertTrue(len(response['data']) == 4)
-
-    def test_serialize_include(self):
-        """Assert a partially marshaling response is included."""
-        model = UserModel()
-        self.session.add(model)
-        model = UserModel(parent=model)
-        self.session.add(model)
-
-        adapter = UserAdapter(parameters={'include': 'parent'})
-        response = adapter.make_single_object_response(1)
-
-        self.assertTrue('data' in response)
-        self.assertTrue('id' in response['data'])
-        self.assertTrue('type' in response['data'])
-        self.assertTrue('name' in response['data']['attributes'])
-        self.assertTrue('parent' in response['data']['relationships'])
-        self.assertTrue(len(response['data']) == 4)
-
-        self.assertTrue('included' in response)
-        self.assertTrue('id' in response['included'][0])
-        self.assertTrue('type' in response['included'][0])
-        self.assertTrue(len(response['included'][0]) == 2)

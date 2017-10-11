@@ -16,7 +16,7 @@ class _AdapterRegistry(type):
 
     def __new__(cls, name, bases, attrs):
         new_cls = type.__new__(cls, name, bases, attrs)
-        cls.adapters[name] = new_cls
+        cls.adapters['{}.{}'.format(new_cls.__module__, name)] = new_cls
         return new_cls
 
 
@@ -171,10 +171,32 @@ class Adapter(metaclass=_AdapterRegistry):
         return
 
 
-def get_adapter(name: str) -> Adapter:
+def get_adapter(name: str, registry=None) -> Adapter:
     """Return the requested class or raise.
 
     Keyword arguments:
         name (str): Adapter class name.
     """
-    return _AdapterRegistry.adapters[name]
+    if registry is None:
+        registry = _AdapterRegistry.adapters
+
+    if name in registry:
+        return registry[name]
+
+    adapters = []
+    for key, value in registry.items():
+        if name in key:
+            adapters.append(value)
+
+    if len(adapters) != 1:
+        raise KeyError('Unique adapter could not be found.')
+    return adapters[0]
+
+
+def get_adapter_subset(prefix: str) -> dict:
+    """Return a subset of registered adapters."""
+    subset = {}
+    for key, value in _AdapterRegistry.adapters.items():
+        if key.startswith(prefix):
+            subset[key] = value
+    return subset
