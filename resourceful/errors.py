@@ -1,0 +1,4 @@
+
+
+class ResourceError(Exception):
+    pass
