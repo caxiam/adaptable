@@ -100,7 +100,7 @@ class QueryMixin(CompoundDocumentMixin):
         query, total, errs = self.paginate_query(query, errors)
         errors.extend(errs)
 
-        self.context.pagination_total = total
+        self.pagination_total = total
 
         if errors:
             return self.raise_jsonapi_errors(errors)
@@ -109,6 +109,7 @@ class QueryMixin(CompoundDocumentMixin):
     @resourceful.post_dump
     def paginate_response(self, response):
         """Return a paginated document."""
+        print(response)
         response = self.jsonapi.make_paginated_response(
-            response, self.pagination_url, self.context.pagination_total)
+            response, self.pagination_url, self.pagination_total)
         return response
