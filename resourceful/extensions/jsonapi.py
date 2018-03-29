@@ -109,7 +109,6 @@ class QueryMixin(CompoundDocumentMixin):
     @resourceful.post_dump
     def paginate_response(self, response):
         """Return a paginated document."""
-        print(response)
         response = self.jsonapi.make_paginated_response(
             response, self.pagination_url, self.pagination_total)
         return response
