@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name='jsonapi-query',
+    name='resourceful',
     version='0.2',
     url='https://github.com/caxiam/resourceful',
     license='Apache Version 2.0',
